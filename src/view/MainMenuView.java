@@ -25,9 +25,9 @@ public class MainMenuView extends JFrame {
         Border borderOfMain = BorderFactory.createLineBorder(Color.RED, 5);
         label.setBorder(borderOfMain);
 
-        newGame.setBounds(5, 200, 988, 200);
-        highScore.setBounds(5, 400, 988, 200);
-        exit.setBounds(5, 600, 988, 200);
+        newGame.setBounds(5, 200, 980, 200);
+        highScore.setBounds(5, 400, 980, 200);
+        exit.setBounds(5, 600, 980, 200);
 
         newGame.setFocusPainted(false);
         highScore.setFocusPainted(false);
