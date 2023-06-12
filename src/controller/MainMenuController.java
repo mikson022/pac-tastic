@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainMenuController implements ActionListener {
-    private MainMenuView view;
+    private final MainMenuView view;
     public MainMenuController() {
         view = new MainMenuView();
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

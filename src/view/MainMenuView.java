@@ -6,9 +6,9 @@ import java.awt.*;
 import java.util.Objects;
 
 public class MainMenuView extends JFrame {
-    private JButton newGame = new JButton("New Game");
-    private JButton highScore = new JButton("High Scores");
-    private JButton exit = new JButton("Exit");
+    private final JButton newGame = new JButton("New Game");
+    private final JButton highScore = new JButton("High Scores");
+    private final JButton exit = new JButton("Exit");
 
     public MainMenuView() {
         JLabel label = new JLabel();
