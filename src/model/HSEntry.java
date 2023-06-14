@@ -1,6 +1,8 @@
 package model;
 
-public class HSEntry {
+import java.io.Serializable;
+
+public class HSEntry implements Serializable {
     private String name;
     private int score;
 
