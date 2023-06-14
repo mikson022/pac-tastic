@@ -13,7 +13,6 @@ public class HighScoreView extends JFrame{
         highScoresList = new JList<>();
         highScoresList.setModel(highScoresListModel);
 
-
         this.setTitle("High Score");
 
         ImageIcon pacIcon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/pacIcon.png")));
@@ -24,13 +23,16 @@ public class HighScoreView extends JFrame{
         highScoresList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(highScoresList);
-        scrollPane.setPreferredSize(new Dimension(400, 600));
+        scrollPane.setPreferredSize(new Dimension(500, 700));
 
         add(scrollPane, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(null);
     }
-    public void setHighScoreList(String entry) {
+    public void addHighScoreLogToViewList(String entry) {
         highScoresListModel.addElement(entry);
+    }
+    public void clearViewList() {
+        highScoresListModel.clear();
     }
 }
