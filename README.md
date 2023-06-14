@@ -13,6 +13,7 @@ This project demonstrates my skills in GUI programming, event handling, serializ
 ## Features
 
 - Main menu with options for starting a new game, viewing high scores, and exiting
+- High scores persistence using the Serializable interface
 
 ## Usage
 
