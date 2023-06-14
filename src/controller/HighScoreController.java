@@ -4,6 +4,8 @@ import model.HSEntry;
 import model.HighScoreModel;
 import view.HighScoreView;
 
+import java.io.IOException;
+
 public class HighScoreController {
     private final HighScoreModel model;
     private final HighScoreView view;
@@ -19,6 +21,7 @@ public class HighScoreController {
     }
     public void presentHighScoreTable() {
         view.clearViewList();
+        model.deserializeHSLogs();
         passDataToHSView();
         view.setVisible(true);
     }
