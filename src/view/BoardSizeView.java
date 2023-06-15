@@ -2,21 +2,22 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class BoardSizeView {
-    private JFrame frame;
-    private JTextField rowsTextField;
-    private JTextField columnsTextField;
-    private JButton okButton;
-    private JButton cancelButton;
+    private final JFrame frame;
+    private final JTextField rowsTextField;
+    private final JTextField columnsTextField;
+    private final JButton okButton;
+    private final JButton cancelButton;
 
     public BoardSizeView() {
-        frame = new JFrame("New Game");
+        frame = new JFrame(" Available: 10-100 ");
         frame.setSize(320, 115);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        ImageIcon pacIcon = new ImageIcon(getClass().getResource("/pics/pacIcon.png"));
+        ImageIcon pacIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/pics/pacIcon.png")));
         frame.setIconImage(pacIcon.getImage());
 
         JPanel panel = new JPanel();
@@ -49,7 +50,8 @@ public class BoardSizeView {
     public JButton getCancelButton() { return cancelButton; }
     public String getRowsInput() { return rowsTextField.getText(); }
     public String getColumnsInput() { return columnsTextField.getText(); }
+    public void clearValues() { rowsTextField.setText(""); columnsTextField.setText("");}
     public void display() { frame.setVisible(true); }
-    public void close() { frame.dispose(); }
-    public void setDefaultCloseOperation(int ee) {}
+    public void close() { clearValues(); frame.dispose(); }
+    public void setDefaultCloseOperation(int e) { clearValues(); }
 }

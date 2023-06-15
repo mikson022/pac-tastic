@@ -1,18 +1,15 @@
 package controller;
 
-import model.BoardSizeModel;
 import view.BoardSizeView;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BoardSizeController implements ActionListener{
+public class BoardSizeController implements ActionListener {
     private final BoardSizeView view;
-    private final BoardSizeModel model;
 
     public BoardSizeController() {
         view = new BoardSizeView();
-        model = new BoardSizeModel();
     }
 
     public void showPrompt() {
@@ -21,16 +18,29 @@ public class BoardSizeController implements ActionListener{
         view.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         view.display();
     }
-    private void fetchArea() {
-        String getRow = view.getRowsInput();
-        String getColumn = view.getColumnsInput();
-    }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == view.getCancelButton()) {
             view.close();
         } else if (e.getSource() == view.getOkButton()) {
-            fetchArea();
+            setArea();
+        }
+    }
+    private void setArea() {
+        int rows = convertStringToInt(view.getRowsInput());
+        int columns = convertStringToInt(view.getColumnsInput());
+        if (rows >= 10 && rows <= 100 && columns >= 10  && columns <= 100) {
+            rows = convertStringToInt(view.getRowsInput());
+            columns = convertStringToInt(view.getColumnsInput());
+        } else {
+            view.clearValues();
+        }
+    }
+    private int convertStringToInt(String str) {
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return -1;
         }
     }
 }
