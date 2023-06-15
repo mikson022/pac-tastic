@@ -7,9 +7,11 @@ import java.awt.event.ActionListener;
 
 public class BoardSizeController implements ActionListener {
     private final BoardSizeView view;
+    private final GameController gameController;
 
     public BoardSizeController() {
         view = new BoardSizeView();
+        gameController = new GameController();
     }
 
     public void showPrompt() {
