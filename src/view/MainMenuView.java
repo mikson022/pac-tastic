@@ -14,10 +14,10 @@ public class MainMenuView extends JFrame {
         JLabel label = new JLabel();
         this.setTitle("PACMAN");
 
-        ImageIcon pacIcon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pacIcon.png")));
+        ImageIcon pacIcon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/pacIcon.png")));
         this.setIconImage(pacIcon.getImage());
 
-        ImageIcon upperGreeter = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("UpperPlaceGreeter.jpg")));
+        ImageIcon upperGreeter = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/UpperPlaceGreeter.jpg")));
         label.setIcon(upperGreeter);
         label.setVerticalAlignment(JLabel.TOP);
         label.setHorizontalAlignment(JLabel.CENTER);
