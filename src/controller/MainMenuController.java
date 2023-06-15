@@ -7,17 +7,22 @@ import java.awt.event.ActionListener;
 
 public class MainMenuController implements ActionListener {
     private final MainMenuView view;
+    private final BoardSizeController boardSizeController;
+    private final NewGameController newGameController;
     public MainMenuController() {
         view = new MainMenuView();
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         view.getNewGameButton().addActionListener(this);
         view.getHighScoreButton().addActionListener(this);
         view.getExitButton().addActionListener(this);
+
+        boardSizeController = new BoardSizeController();
+        newGameController = new NewGameController();
     }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == view.getNewGameButton()) {
-            view.getNewGameButton();
+            boardSizeController.showPrompt();
         } else if (e.getSource() == view.getHighScoreButton()) {
             view.getHighScoreButton();
         } else if (e.getSource() == view.getExitButton()) {
