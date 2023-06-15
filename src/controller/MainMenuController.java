@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class MainMenuController implements ActionListener {
     private final MainMenuView view;
     private final BoardSizeController boardSizeController;
-    private final NewGameController newGameController;
+    private final GameController gameController;
     public MainMenuController() {
         view = new MainMenuView();
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -17,7 +17,7 @@ public class MainMenuController implements ActionListener {
         view.getExitButton().addActionListener(this);
 
         boardSizeController = new BoardSizeController();
-        newGameController = new NewGameController();
+        gameController = new GameController();
     }
     @Override
     public void actionPerformed(ActionEvent e) {
