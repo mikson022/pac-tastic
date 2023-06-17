@@ -7,11 +7,9 @@ import java.awt.event.ActionListener;
 
 public class BoardSizeController implements ActionListener {
     private final BoardSizeView view;
-    private final GameController gameController;
 
     public BoardSizeController() {
         view = new BoardSizeView();
-        gameController = new GameController();
     }
 
     public void showPrompt() {
@@ -32,8 +30,8 @@ public class BoardSizeController implements ActionListener {
         int rows = convertStringToInt(view.getRowsInput());
         int columns = convertStringToInt(view.getColumnsInput());
         if (rows >= 10 && rows <= 100 && columns >= 10  && columns <= 100) {
-            rows = convertStringToInt(view.getRowsInput());
-            columns = convertStringToInt(view.getColumnsInput());
+            new GameController(rows, columns);
+            view.close();
         } else {
             view.clearValues();
         }
