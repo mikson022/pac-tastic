@@ -15,10 +15,13 @@ public class Pacman extends JLabel {
         this.table = table;
     }
     public void move(int dx, int dy, String direction) {
-        this.icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/Pacman"+ direction +".png")));
-        this.xPos = xPos + dx;
-        this.yPos = yPos + dy;
+        this.icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/Pacman" + direction + ".png")));
+        int x = (xPos + dx + table.getColumnCount()) % table.getColumnCount();
+        int y = (yPos + dy + table.getRowCount()) % table.getRowCount();
+        this.xPos = x;
+        this.yPos = y;
     }
+
     public int getXPos() { return xPos; }
     public int getYPos() { return yPos; }
     protected void paintComponent(Graphics g) {
