@@ -34,18 +34,22 @@ public class GameController {
                     case KeyEvent.VK_LEFT -> {
                         pacman.move(-1, 0, "Left");
                         view.updateView();
+                        model.playSound("movement.wav");
                     }
                     case KeyEvent.VK_RIGHT -> {
                         pacman.move(1, 0, "Right");
                         view.updateView();
+                        model.playSound("movement.wav");
                     }
                     case KeyEvent.VK_UP -> {
                         pacman.move(0, -1, "Up");
                         view.updateView();
+                        model.playSound("movement.wav");
                     }
                     case KeyEvent.VK_DOWN -> {
                         pacman.move(0, 1, "Down");
                         view.updateView();
+                        model.playSound("movement.wav");
                     }
                 }
             }
