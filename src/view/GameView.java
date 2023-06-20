@@ -60,23 +60,47 @@ public class GameView {
         panelSouth.setBorder(bRed);
         panelSouth.setBackground(Color.BLACK);
 
+        Font labelFont = new Font("Arial", Font.BOLD, 40);
+        Color labelForeground = Color.WHITE;
 
         JLabel timeLabel = new JLabel("Time");
+        timeLabel.setFont(labelFont);
+        timeLabel.setForeground(labelForeground);
         panelSouth.add(timeLabel);
-        JLabel livesLabel = new JLabel("Lives");
-        panelSouth.add(livesLabel);
-        JLabel scoreLabel = new JLabel("Score");
-        panelSouth.add(scoreLabel);
-        JLabel levLabel = new JLabel("Level");
-        panelSouth.add(levLabel);
-        // temporary
 
+        JLabel livesLabel = new JLabel("Lives");
+        livesLabel.setFont(labelFont);
+        livesLabel.setForeground(labelForeground);
+        panelSouth.add(livesLabel);
+
+        JLabel scoreLabel = new JLabel("Score");
+        scoreLabel.setFont(labelFont);
+        scoreLabel.setForeground(labelForeground);
+        panelSouth.add(scoreLabel);
+
+        JLabel levLabel = new JLabel("Level");
+        levLabel.setFont(labelFont);
+        levLabel.setForeground(labelForeground);
+        panelSouth.add(levLabel);
+
+        timeL.setFont(labelFont);
+        timeL.setForeground(labelForeground);
         panelSouth.add(timeL);
+
+        // below, to be updated
         JLabel livesL = new JLabel("3");
+        livesL.setFont(labelFont);
+        livesL.setForeground(labelForeground);
         panelSouth.add(livesL);
+
         JLabel scoreL = new JLabel("0");
+        scoreL.setFont(labelFont);
+        scoreL.setForeground(labelForeground);
         panelSouth.add(scoreL);
+
         JLabel levL = new JLabel("1");
+        levL.setFont(labelFont);
+        levL.setForeground(labelForeground);
         panelSouth.add(levL);
 
         frame.add(panelSouth, BorderLayout.SOUTH);
