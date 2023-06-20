@@ -10,19 +10,23 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Objects;
 
-public class GameView extends JFrame{
+public class GameView {
     private final JTable table;
     private final Pacman pacman;
-    public GameView(Pacman pacman, JTable table) {
+    private final JFrame frame;
+    private String timeOnPanel;
+    private JLabel timeL = new JLabel();
+    public GameView(JFrame frame, Pacman pacman, JTable table) {
         this.pacman = pacman;
         this.table = table;
+        this.frame = frame;
         initializeUI();
     }
     private void initializeUI() {
-        setTitle("PACMAN");
+        frame.setTitle("PACMAN");
 
         ImageIcon pacIcon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/pacIcon.png")));
-        setIconImage(pacIcon.getImage());
+        frame.setIconImage(pacIcon.getImage());
 
         table.setBackground(Color.BLACK);
         table.setGridColor(table.getBackground());
@@ -40,14 +44,14 @@ public class GameView extends JFrame{
             }
         });
 
-        this.addComponentListener(new ComponentAdapter() {
+        frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 scaleProperly();
             }
         });
 
-        add(table);
+        frame.add(table);
 
         JPanel panelSouth = new JPanel();
         panelSouth.setLayout(new GridLayout(2, 4, 10, 10 ));
@@ -66,7 +70,7 @@ public class GameView extends JFrame{
         JLabel levLabel = new JLabel("Level");
         panelSouth.add(levLabel);
         // temporary
-        JLabel timeL = new JLabel("00:00");
+
         panelSouth.add(timeL);
         JLabel livesL = new JLabel("3");
         panelSouth.add(livesL);
@@ -75,11 +79,11 @@ public class GameView extends JFrame{
         JLabel levL = new JLabel("1");
         panelSouth.add(levL);
 
-        add(panelSouth, BorderLayout.SOUTH);
-        pack();
-        setLocationRelativeTo(null);
-        setBackground(Color.BLACK);
-        setVisible(true);
+        frame.add(panelSouth, BorderLayout.SOUTH);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setBackground(Color.BLACK);
+        frame.setVisible(true);
     }
     private void scaleProperly() {
         int width = table.getWidth();
@@ -93,9 +97,8 @@ public class GameView extends JFrame{
         int y = pacman.getYPos() * cellSize;
         pacman.setBounds(x, y, cellSize, cellSize);
     }
-    public void updateView() {
-        table.repaint();
+    public void setTime(String time) {
+        this.timeL.setText(time);
     }
-
 
 }
