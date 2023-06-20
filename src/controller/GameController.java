@@ -37,7 +37,7 @@ public class GameController {
                         Thread.sleep(1000);
                         incrementSeconds();
                         updateFormattedTime();
-                        view.setTime(formattedTime);
+                        view.setTimeOnPanel(formattedTime);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
