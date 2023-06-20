@@ -19,7 +19,9 @@ public class HighScoreView extends JFrame{
         this.setIconImage(pacIcon.getImage());
         setLayout(new BorderLayout());
 
-        highScoresList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
+        highScoresList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 18));
+        highScoresList.setForeground(Color.RED);
+        highScoresList.setBackground(Color.BLACK);
         highScoresList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(highScoresList);
