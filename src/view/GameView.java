@@ -46,10 +46,7 @@ public class GameView {
 
         frame.addComponentListener(new ComponentAdapter() {
             @Override
-            public void componentResized(ComponentEvent e) {
-                scaleProperly();
-            }
-        });
+            public void componentResized(ComponentEvent e) { scaleTableAndItsComponent(); } });
 
         frame.add(table);
 
@@ -109,7 +106,7 @@ public class GameView {
         frame.setBackground(Color.BLACK);
         frame.setVisible(true);
     }
-    private void scaleProperly() {
+    private void scaleTableAndItsComponent() {
         int width = table.getWidth();
         int height = table.getHeight();
         int cellSize = Math.min(width / table.getColumnCount(), height / table.getRowCount());
@@ -121,7 +118,7 @@ public class GameView {
         int y = pacman.getYPos() * cellSize;
         pacman.setBounds(x, y, cellSize, cellSize);
     }
-    public void setTime(String time) {
+    public void setTimeOnPanel(String time) {
         this.timeL.setText(time);
     }
 
