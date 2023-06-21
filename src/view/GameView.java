@@ -19,6 +19,7 @@ public class GameView {
     private final Pacman pacman;
     private final JFrame frame;
     private final JLabel timeL = new JLabel();
+    private final JLabel scoreL = new JLabel("0");
     public GameView(JFrame frame, Pacman pacman, JTable table) {
         this.pacman = pacman;
         this.table = table;
@@ -100,7 +101,6 @@ public class GameView {
         livesL.setForeground(labelForeground);
         panelSouth.add(livesL);
 
-        JLabel scoreL = new JLabel("0");
         scoreL.setFont(labelFont);
         scoreL.setForeground(labelForeground);
         panelSouth.add(scoreL);
@@ -130,6 +130,9 @@ public class GameView {
     }
     public void setTimeOnPanel(String time) {
         this.timeL.setText(time);
+    }
+    public void setScoreOnPanel(int score) {
+        this.scoreL.setText(String.valueOf(score));
     }
 
 }
