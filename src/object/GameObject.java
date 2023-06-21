@@ -1,5 +1,5 @@
 package object;
 
 interface GameObject {
-    public void handleCollision(GameObject other);
+    void handleCollision(GameObject other);
 }

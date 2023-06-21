@@ -5,9 +5,9 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Point extends JLabel implements GameObject {
-    private int xPos;
-    private int yPos;
-    private ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/Point.png")));
+    private final int xPos;
+    private final int yPos;
+    private final ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/Point.png")));
     private final JTable table;
     public Point(JTable table, int x, int y) {
         this.xPos = x;

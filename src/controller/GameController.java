@@ -8,7 +8,6 @@ import view.GameView;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -51,9 +50,7 @@ public class GameController {
                     }
                 }
             }
-            public void stopCounting() {
-                running = false;
-            }
+            public void stopCounting() { running = false; }
             private void generatePoint() {
                 if (seconds == 0) { return; }
                 if (seconds % 5 == 0) {
@@ -81,14 +78,9 @@ public class GameController {
             }
             private void incrementSeconds() {
                 seconds++;
-                if (seconds >= 60) {
-                    seconds = 0;
-                    minutes++;
-                }
+                if (seconds >= 60) { seconds = 0; minutes++; }
             }
-            private void updateFormattedTime() {
-                this.formattedTime = String.format("%02d:%02d", minutes, seconds);
-            }
+            private void updateFormattedTime() { this.formattedTime = String.format("%02d:%02d", minutes, seconds); }
         };
 
         timeCounter.start();

@@ -1,6 +1,6 @@
 package view;
 
-import controller.GameController;
+
 import object.Pacman;
 import object.Point;
 
@@ -10,7 +10,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static controller.GameController.points;
