@@ -19,7 +19,7 @@ public class GameView {
     private final JTable table;
     private final Pacman pacman;
     private final JFrame frame;
-    private JLabel timeL = new JLabel();
+    private final JLabel timeL = new JLabel();
     public GameView(JFrame frame, Pacman pacman, JTable table) {
         this.pacman = pacman;
         this.table = table;
@@ -46,7 +46,6 @@ public class GameView {
                 if (points != null) {
 
                         for (Point point : points) {
-
                                 if (row == point.getYPos() && column == point.getXPos()) {
                                     return point;
                                 }

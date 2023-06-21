@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class Point extends JLabel {
+public class Point extends JLabel implements GameObject {
     private int xPos;
     private int yPos;
     private ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/Point.png")));
@@ -21,6 +21,8 @@ public class Point extends JLabel {
         int cellWidth = table.getColumnModel().getColumn(0).getWidth();
         g.drawImage(icon.getImage(), 0, 0, cellWidth, table.getRowHeight(yPos), null);
     }
+    @Override
+    public void handleCollision(GameObject other) {}
 }
 
 
