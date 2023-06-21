@@ -1,6 +1,7 @@
 package controller;
 
 import model.GameModel;
+import model.SoundModel;
 import model.ThreadModel;
 import object.Pacman;
 import object.Point;
@@ -12,6 +13,11 @@ import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameController {
+    SoundModel bonusSound = new SoundModel("bonus.wav");
+    SoundModel gameOverSound = new SoundModel("game-over.wav");
+    SoundModel mazeSound = new SoundModel("maze.wav");
+    SoundModel moveSound = new SoundModel("movement.wav");
+    SoundModel pointSound = new SoundModel("point.wav");
     private final GameModel model;
     private final GameView view;
     private final Pacman pacman;
@@ -31,7 +37,6 @@ public class GameController {
         points = new CopyOnWriteArrayList<>();
         model = new GameModel(pacman, table);
         view = new GameView(frame, pacman, table);
-
         ThreadModel timeCounter = new ThreadModel() {
             private volatile boolean running = true;
             private int minutes;
@@ -100,25 +105,25 @@ public class GameController {
                         pacman.move(-1, 0, "Left");
                         handleCollisions();
                         updateView();
-                        model.playSound("movement.wav");
+                        moveSound.playSound();
                     }
                     case KeyEvent.VK_RIGHT -> {
                         pacman.move(1, 0, "Right");
                         handleCollisions();
                         updateView();
-                        model.playSound("movement.wav");
+                        moveSound.playSound();
                     }
                     case KeyEvent.VK_UP -> {
                         pacman.move(0, -1, "Up");
                         handleCollisions();
                         updateView();
-                        model.playSound("movement.wav");
+                        moveSound.playSound();
                     }
                     case KeyEvent.VK_DOWN -> {
                         pacman.move(0, 1, "Down");
                         handleCollisions();
                         updateView();
-                        model.playSound("movement.wav");
+                        moveSound.playSound();
                     }
                 }
             }
@@ -130,7 +135,7 @@ public class GameController {
                 this.score +=10 ;
                 view.setScoreOnPanel(score);
                 pacman.handleCollision(point);
-                model.playSound("point.wav");
+                pointSound.playSound();
             }
         }
     }
