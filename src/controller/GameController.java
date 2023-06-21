@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameController {
     private final GameModel model;
@@ -16,7 +18,7 @@ public class GameController {
     private final Pacman pacman;
     private final JTable table;
     private final JFrame frame;
-    public static ArrayList<Point> points;
+    public static CopyOnWriteArrayList<Point> points;
     public GameController(int rows, int columns) {
         this.frame = new JFrame();
         table = new JTable(rows, columns) {
@@ -25,7 +27,7 @@ public class GameController {
             }
         };
         pacman = new Pacman(table);
-        points = new ArrayList<>();
+        points = new CopyOnWriteArrayList<>();
         model = new GameModel(pacman, table);
         view = new GameView(frame, pacman, table);
 
@@ -58,19 +60,25 @@ public class GameController {
                     int x = model.getRandomIntWithinColumns();
                     int y = model.getRandomIntWithinRows();
                     boolean pointExists = false;
-                    for (Point point : points) {
+
+                    ListIterator<Point> iterator = points.listIterator();
+                    while (iterator.hasNext()) {
+                        Point point = iterator.next();
                         if (point.getXPos() == x && point.getYPos() == y) {
                             pointExists = true;
                             break;
                         }
+                        if (pacman.getXPos() == point.getXPos() && pacman.getYPos() == point.getYPos()) {
+                            iterator.remove();
+                        }
                     }
+
                     if (!pointExists) {
                         Point newPoint = new Point(table, x, y);
                         points.add(newPoint);
                     }
                 }
             }
-
             private void incrementSeconds() {
                 seconds++;
                 if (seconds >= 60) {
@@ -96,27 +104,39 @@ public class GameController {
                 switch (keyCode) {
                     case KeyEvent.VK_LEFT -> {
                         pacman.move(-1, 0, "Left");
+                        handleCollisions();
                         updateView();
                         model.playSound("movement.wav");
                     }
                     case KeyEvent.VK_RIGHT -> {
                         pacman.move(1, 0, "Right");
+                        handleCollisions();
                         updateView();
                         model.playSound("movement.wav");
                     }
                     case KeyEvent.VK_UP -> {
                         pacman.move(0, -1, "Up");
+                        handleCollisions();
                         updateView();
                         model.playSound("movement.wav");
                     }
                     case KeyEvent.VK_DOWN -> {
                         pacman.move(0, 1, "Down");
+                        handleCollisions();
                         updateView();
                         model.playSound("movement.wav");
                     }
                 }
             }
         });
+    }
+    private void handleCollisions() {
+        for (Point point : points) {
+            if (pacman.getXPos() == point.getXPos() && pacman.getYPos() == point.getYPos()) {
+                pacman.handleCollision(point);
+                model.playSound("point.wav");
+            }
+        }
     }
     private void updateView() {
         table.repaint();

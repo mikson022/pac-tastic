@@ -1,10 +1,12 @@
 package object;
 
+import controller.GameController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class Pacman extends JLabel {
+public class Pacman extends JLabel implements GameObject {
     private int xPos;
     private int yPos;
     private ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/PacmanRight.png")));
@@ -28,6 +30,12 @@ public class Pacman extends JLabel {
         super.paintComponent(g);
         int cellWidth = table.getColumnModel().getColumn(0).getWidth();
         g.drawImage(icon.getImage(), 0, 0, cellWidth, table.getRowHeight(yPos), null);
+    }
+    @Override
+    public void handleCollision(GameObject other) {
+        if (other instanceof Point point) {
+            GameController.points.remove(point);
+        }
     }
 }
 
