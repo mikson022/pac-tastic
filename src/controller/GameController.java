@@ -18,7 +18,9 @@ public class GameController {
     private final JTable table;
     private final JFrame frame;
     public static CopyOnWriteArrayList<Point> points;
+    private int score;
     public GameController(int rows, int columns) {
+        score = 0;
         this.frame = new JFrame();
         table = new JTable(rows, columns) {
             @Override
@@ -125,6 +127,8 @@ public class GameController {
     private void handleCollisions() {
         for (Point point : points) {
             if (pacman.getXPos() == point.getXPos() && pacman.getYPos() == point.getYPos()) {
+                this.score +=10 ;
+                view.setScoreOnPanel(score);
                 pacman.handleCollision(point);
                 model.playSound("point.wav");
             }
