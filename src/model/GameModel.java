@@ -4,6 +4,7 @@ import object.Pacman;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.util.Objects;
+import java.util.Random;
 
 public class GameModel {
     private final JTable table;
@@ -32,6 +33,14 @@ public class GameModel {
                 isSoundPlaying = false;
             }
         }
+    }
+    public int getRandomIntWithinRows() {
+        Random random = new Random();
+        return random.nextInt(table.getRowCount());
+    }
+    public int getRandomIntWithinColumns() {
+        Random random = new Random();
+        return random.nextInt(table.getColumnCount());
     }
 }
 
