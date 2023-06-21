@@ -1,6 +1,8 @@
 package view;
 
+import controller.GameController;
 import object.Pacman;
+import object.Point;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -8,13 +10,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
 import java.util.Objects;
+
+import static controller.GameController.points;
 
 public class GameView {
     private final JTable table;
     private final Pacman pacman;
     private final JFrame frame;
-    private String timeOnPanel;
     private JLabel timeL = new JLabel();
     public GameView(JFrame frame, Pacman pacman, JTable table) {
         this.pacman = pacman;
@@ -38,9 +42,17 @@ public class GameView {
                                                            boolean isSelected, boolean hasFocus, int row, int column) {
                 if (row == pacman.getYPos() && column == pacman.getXPos()) {
                     return pacman;
-                } else {
-                    return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 }
+                if (points != null) {
+
+                        for (Point point : points) {
+
+                                if (row == point.getYPos() && column == point.getXPos()) {
+                                    return point;
+                                }
+                        }
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         });
 

@@ -3,10 +3,12 @@ package controller;
 import model.GameModel;
 import model.ThreadModel;
 import object.Pacman;
+import object.Point;
 import view.GameView;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class GameController {
     private final GameModel model;
@@ -14,6 +16,7 @@ public class GameController {
     private final Pacman pacman;
     private final JTable table;
     private final JFrame frame;
+    public static ArrayList<Point> points;
     public GameController(int rows, int columns) {
         this.frame = new JFrame();
         table = new JTable(rows, columns) {
@@ -22,6 +25,7 @@ public class GameController {
             }
         };
         pacman = new Pacman(table);
+        points = new ArrayList<>();
         model = new GameModel(pacman, table);
         view = new GameView(frame, pacman, table);
 
@@ -38,6 +42,8 @@ public class GameController {
                         incrementSeconds();
                         updateFormattedTime();
                         view.setTimeOnPanel(formattedTime);
+                        generatePoint();
+                        updateView();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -46,6 +52,25 @@ public class GameController {
             public void stopCounting() {
                 running = false;
             }
+            private void generatePoint() {
+                if (seconds == 0) { return; }
+                if (seconds % 5 == 0) {
+                    int x = model.getRandomIntWithinColumns();
+                    int y = model.getRandomIntWithinRows();
+                    boolean pointExists = false;
+                    for (Point point : points) {
+                        if (point.getXPos() == x && point.getYPos() == y) {
+                            pointExists = true;
+                            break;
+                        }
+                    }
+                    if (!pointExists) {
+                        Point newPoint = new Point(table, x, y);
+                        points.add(newPoint);
+                    }
+                }
+            }
+
             private void incrementSeconds() {
                 seconds++;
                 if (seconds >= 60) {
@@ -57,6 +82,7 @@ public class GameController {
                 this.formattedTime = String.format("%02d:%02d", minutes, seconds);
             }
         };
+
         timeCounter.start();
 
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
