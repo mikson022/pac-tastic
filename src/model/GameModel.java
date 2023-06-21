@@ -9,7 +9,7 @@ import java.util.Random;
 public class GameModel {
     private final JTable table;
     private final Pacman pacman;
-    private boolean isSoundPlaying; // Track sound playback
+    private boolean isSoundPlaying;
     public GameModel(Pacman pacman, JTable table) {
         this.pacman = pacman;
         this.table = table;
