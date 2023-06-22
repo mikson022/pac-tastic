@@ -1,9 +1,7 @@
 package model;
 
 import object.Pacman;
-import javax.sound.sampled.*;
 import javax.swing.*;
-import java.util.Objects;
 import java.util.Random;
 
 public class GameModel {
