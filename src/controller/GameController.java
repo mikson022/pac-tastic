@@ -1,30 +1,28 @@
 package controller;
 
 import model.GameModel;
-import model.SoundModel;
 import model.ThreadModel;
+import object.Collision;
+import object.Maze;
 import object.Pacman;
 import object.Point;
 import view.GameView;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ListIterator;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameController {
-    SoundModel bonusSound = new SoundModel("bonus.wav");
-    SoundModel gameOverSound = new SoundModel("game-over.wav");
-    SoundModel mazeSound = new SoundModel("maze.wav");
-    SoundModel moveSound = new SoundModel("movement.wav");
-    SoundModel pointSound = new SoundModel("point.wav");
     private final GameModel model;
     private final GameView view;
     private final Pacman pacman;
     private final JTable table;
     private final JFrame frame;
+    public static CopyOnWriteArrayList<Collision> collisions;
     public static CopyOnWriteArrayList<Point> points;
-    private int score;
+    public static ArrayList<Maze> mazes;
+    private static int score;
     public GameController(int rows, int columns) {
         score = 0;
         this.frame = new JFrame();
@@ -34,9 +32,13 @@ public class GameController {
             }
         };
         pacman = new Pacman(table);
-        points = new CopyOnWriteArrayList<>();
         model = new GameModel(pacman, table);
         view = new GameView(frame, pacman, table);
+
+        collisions = new CopyOnWriteArrayList<>();
+        mazes = new ArrayList<>();
+        points = new CopyOnWriteArrayList<>();
+
         ThreadModel timeCounter = new ThreadModel() {
             private volatile boolean running = true;
             private int minutes;
@@ -63,23 +65,18 @@ public class GameController {
                 if (seconds % 5 == 0) {
                     int x = model.getRandomIntWithinColumns();
                     int y = model.getRandomIntWithinRows();
-                    boolean pointExists = false;
+                    boolean collides = false;
 
-                    ListIterator<Point> iterator = points.listIterator();
-                    while (iterator.hasNext()) {
-                        Point point = iterator.next();
-                        if (point.getXPos() == x && point.getYPos() == y) {
-                            pointExists = true;
+                    for (Collision collision : collisions) {
+                        if (collision.collidesWith(x, y)) {
+                            collides = true;
                             break;
                         }
-                        if (pacman.getXPos() == point.getXPos() && pacman.getYPos() == point.getYPos()) {
-                            iterator.remove();
-                        }
                     }
-
-                    if (!pointExists) {
+                    if (!collides) {
                         Point newPoint = new Point(table, x, y);
                         points.add(newPoint);
+                        collisions.add(newPoint);
                     }
                 }
             }
@@ -100,46 +97,45 @@ public class GameController {
                 handleKeyPress(e.getKeyCode());
             }
             private void handleKeyPress(int keyCode) {
+                int dx = 0;
+                int dy = 0;
+                String direction = "";
+
                 switch (keyCode) {
                     case KeyEvent.VK_LEFT -> {
-                        pacman.move(-1, 0, "Left");
-                        handleCollisions();
-                        updateView();
-                        moveSound.playSound();
+                        dx = -1;
+                        direction = "Left";
                     }
                     case KeyEvent.VK_RIGHT -> {
-                        pacman.move(1, 0, "Right");
-                        handleCollisions();
-                        updateView();
-                        moveSound.playSound();
+                        dx = 1;
+                        direction = "Right";
                     }
                     case KeyEvent.VK_UP -> {
-                        pacman.move(0, -1, "Up");
-                        handleCollisions();
-                        updateView();
-                        moveSound.playSound();
+                        dy = -1;
+                        direction = "Up";
                     }
                     case KeyEvent.VK_DOWN -> {
-                        pacman.move(0, 1, "Down");
-                        handleCollisions();
-                        updateView();
-                        moveSound.playSound();
+                        dy = 1;
+                        direction = "Down";
                     }
                 }
+                int newXPos = (pacman.getXPos() + dx + table.getColumnCount()) % table.getColumnCount();
+                int newYPos = (pacman.getYPos() + dy + table.getRowCount()) % table.getRowCount();
+                if (!isWithinMazeBounds(newXPos, newYPos)) {
+                    return;
+                }
+                pacman.move(dx, dy, direction);
+                updateView();
+            }
+            private boolean isWithinMazeBounds(int x, int y) {
+                Object mazeObject = table.getValueAt(y, x);
+                return !(mazeObject instanceof Maze);
             }
         });
     }
-    private void handleCollisions() {
-        for (Point point : points) {
-            if (pacman.getXPos() == point.getXPos() && pacman.getYPos() == point.getYPos()) {
-                this.score +=10 ;
-                view.setScoreOnPanel(score);
-                pacman.handleCollision(point);
-                pointSound.playSound();
-            }
-        }
-    }
+    public static void addPoint() { score += 10; }
     private void updateView() {
+        view.setScoreOnPanel(score);
         table.repaint();
         frame.repaint();
     }

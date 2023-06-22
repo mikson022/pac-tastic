@@ -2,27 +2,30 @@ package object;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
-public class Point extends JLabel implements Collision {
+public class Maze extends JLabel implements Collision {
     private final int xPos;
     private final int yPos;
-    private final ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/Point.png")));
     private final JTable table;
-    public Point(JTable table, int x, int y) {
+    public Maze(JTable table, int x, int y) {
+        this.setOpaque(true);
+        this.setBackground(Color.RED);
         this.xPos = x;
         this.yPos = y;
         this.table = table;
     }
     public int getXPos() { return xPos; }
     public int getYPos() { return yPos; }
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         int cellWidth = table.getColumnModel().getColumn(0).getWidth();
-        g.drawImage(icon.getImage(), 0, 0, cellWidth, table.getRowHeight(yPos), null);
+        int cellHeight = table.getRowHeight(yPos);
+        g.setColor(Color.RED);
+        g.fillRect(0, 0, cellWidth, cellHeight);
     }
     @Override
-    public boolean collidesWith(int x, int y) { return (xPos == x && yPos == y); }
+    public boolean collidesWith(int x, int y) {
+        return (xPos == x && yPos == y);
+    }
 }
-
-
