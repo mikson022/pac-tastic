@@ -1,9 +1,9 @@
 package view;
 
 
+import object.Collision;
+import object.Maze;
 import object.Pacman;
-import object.Point;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -12,7 +12,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Objects;
 
-import static controller.GameController.points;
+import static controller.GameController.*;
+
 
 public class GameView {
     private final JTable table;
@@ -43,13 +44,19 @@ public class GameView {
                 if (row == pacman.getYPos() && column == pacman.getXPos()) {
                     return pacman;
                 }
-                if (points != null) {
+                // This statement is temporary because maze will be generated and will populate the collisionsList
+                if (collisions != null) {
 
-                        for (Point point : points) {
-                                if (row == point.getYPos() && column == point.getXPos()) {
-                                    return point;
+                        for (Collision collision : collisions) {
+                                if (row == collision.getYPos() && column == collision.getXPos()) {
+                                    return (Component) collision;
                                 }
                         }
+                }
+                for(Maze maze : mazes){
+                    if (row == maze.getYPos() && column == maze.getXPos()) {
+                        return maze;
+                    }
                 }
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
@@ -68,7 +75,7 @@ public class GameView {
         panelSouth.setBorder(bRed);
         panelSouth.setBackground(Color.BLACK);
 
-        Font labelFont = new Font("Arial", Font.BOLD, 40);
+        Font labelFont = new Font("Arial", Font.BOLD, 30);
         Color labelForeground = Color.WHITE;
 
         JLabel timeLabel = new JLabel("Time");
@@ -120,10 +127,8 @@ public class GameView {
         int width = table.getWidth();
         int height = table.getHeight();
         int cellSize = Math.min(width / table.getColumnCount(), height / table.getRowCount());
-
         table.setRowHeight(cellSize);
         for (int i = 0; i < table.getColumnCount(); i++) { table.getColumnModel().getColumn(i).setPreferredWidth(cellSize); }
-
         int x = pacman.getXPos() * cellSize;
         int y = pacman.getYPos() * cellSize;
         pacman.setBounds(x, y, cellSize, cellSize);
@@ -134,5 +139,4 @@ public class GameView {
     public void setScoreOnPanel(int score) {
         this.scoreL.setText(String.valueOf(score));
     }
-
 }
