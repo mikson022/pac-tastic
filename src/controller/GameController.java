@@ -1,6 +1,7 @@
 package controller;
 
 import model.GameModel;
+import model.MazeGenerator;
 import model.ThreadModel;
 import object.Collision;
 import object.Maze;
@@ -38,7 +39,26 @@ public class GameController {
         collisions = new CopyOnWriteArrayList<>();
         mazes = new ArrayList<>();
         points = new CopyOnWriteArrayList<>();
+        {
+            //MazeGeneration
+            MazeGenerator mazeGenerator = new MazeGenerator(rows, columns);
+            boolean[][] mazeLayout = mazeGenerator.generateMaze();
 
+            int counter = 0;
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < columns; j++) {
+                    counter += 1;
+                    if (mazeLayout[i][j]) {
+                        if (counter % 3 != 0){
+                            Maze maze = new Maze(table, j, i);
+                            collisions.add(maze);
+                            GameController.mazes.add(maze);
+                        }
+                    }
+                }
+            }
+            //MazeGeneration
+        }
         ThreadModel timeCounter = new ThreadModel() {
             private volatile boolean running = true;
             private int minutes;
