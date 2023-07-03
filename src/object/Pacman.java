@@ -1,6 +1,7 @@
 package object;
 
-import controller.GameController;
+
+import model.Cell;
 import model.SoundModel;
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +9,7 @@ import java.util.Objects;
 
 import static controller.GameController.*;
 
-public class Pacman extends JLabel implements Collision {
+public class Pacman extends JLabel implements Collisional {
     private final SoundModel mazeSound = new SoundModel("maze.wav");
     private final SoundModel pointSound = new SoundModel("point.wav");
     private final SoundModel moveSound = new SoundModel("movement.wav");
@@ -24,21 +25,12 @@ public class Pacman extends JLabel implements Collision {
     public void move(int dx, int dy, String direction) {
         int x = (xPos + dx + table.getColumnCount()) % table.getColumnCount();
         int y = (yPos + dy + table.getRowCount()) % table.getRowCount();
-        for (Maze maze : GameController.mazes) {
-            if (maze.getXPos() == x && maze.getYPos() == y) {
-                mazeSound.playSound();
-                return;
-            }
-        }
-        if (points != null) {
-            for (Point point : points) {
-                if (point.getXPos() == x && point.getYPos() == y){
-                    GameController.addPoint();
-                    collisions.remove(point);
-                    points.remove(point);
-                    pointSound.playSound();
-                }
-            }
+
+        Cell destinationCell = cells[y][x];
+        Collisional content = destinationCell.getContent();
+        if (content instanceof Maze) {
+            mazeSound.playSound();
+            return;
         }
         moveSound.playSound();
         this.icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/Pacman" + direction + ".png")));
@@ -52,8 +44,6 @@ public class Pacman extends JLabel implements Collision {
         int cellWidth = table.getColumnModel().getColumn(0).getWidth();
         g.drawImage(icon.getImage(), 0, 0, cellWidth, table.getRowHeight(yPos), null);
     }
-    @Override
-    public boolean collidesWith(int x, int y) { return (xPos == x && yPos == y); }
 }
 
 
