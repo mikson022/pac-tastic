@@ -1,9 +1,11 @@
 package view;
 
-
-import object.Collision;
+import object.Collisional;
 import object.Maze;
 import object.Pacman;
+import model.Cell;
+import object.Point;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -44,18 +46,15 @@ public class GameView {
                 if (row == pacman.getYPos() && column == pacman.getXPos()) {
                     return pacman;
                 }
-                // This statement is temporary because maze will be generated and will populate the collisionsList
-                if (collisions != null) {
+                Cell cell = cells[row][column];
+                Collisional content = cell.getContent();
 
-                        for (Collision collision : collisions) {
-                                if (row == collision.getYPos() && column == collision.getXPos()) {
-                                    return (Component) collision;
-                                }
-                        }
-                }
-                for(Maze maze : mazes){
-                    if (row == maze.getYPos() && column == maze.getXPos()) {
-                        return maze;
+                if (content != null) {
+                    if (content instanceof Maze) {
+                        return (Maze) content;
+                    }
+                    if (content instanceof Point) {
+                        return (Point) content;
                     }
                 }
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
