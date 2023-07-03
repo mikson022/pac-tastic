@@ -3,15 +3,15 @@ package controller;
 import model.GameModel;
 import model.MazeGenerator;
 import model.ThreadModel;
-import object.Collision;
+import model.Cell;
+import object.Collisional;
 import object.Maze;
 import object.Pacman;
-import object.Point;
 import view.GameView;
+
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameController {
@@ -20,25 +20,30 @@ public class GameController {
     private final Pacman pacman;
     private final JTable table;
     private final JFrame frame;
-    public static CopyOnWriteArrayList<Collision> collisions;
-    public static CopyOnWriteArrayList<Point> points;
-    public static ArrayList<Maze> mazes;
+    public static CopyOnWriteArrayList<Collisional> collisions;
+    public static Cell[][] cells;
     private static int score;
     public GameController(int rows, int columns) {
-        score = 0;
         this.frame = new JFrame();
         table = new JTable(rows, columns) {
             @Override
             public void changeSelection(int row, int column, boolean toggle, boolean extend) {
             }
         };
+
+        cells = new Cell[table.getRowCount()][table.getColumnCount()];
+        for (int y = 0; y < table.getRowCount(); y++) {
+            for (int x = 0; x < table.getColumnCount(); x++) {
+                cells[y][x] = new Cell();
+            }
+        }
+
         pacman = new Pacman(table);
         model = new GameModel(pacman, table);
         view = new GameView(frame, pacman, table);
 
         collisions = new CopyOnWriteArrayList<>();
-        mazes = new ArrayList<>();
-        points = new CopyOnWriteArrayList<>();
+        score = 0;
         {
             //MazeGeneration
             MazeGenerator mazeGenerator = new MazeGenerator(rows, columns);
@@ -50,9 +55,8 @@ public class GameController {
                     counter += 1;
                     if (mazeLayout[i][j]) {
                         if (counter % 3 != 0){
-                            Maze maze = new Maze(table, j, i);
-                            collisions.add(maze);
-                            GameController.mazes.add(maze);
+                            Maze maze = new Maze(table);
+                            cells[i][j].addObject(maze);
                         }
                     }
                 }
@@ -72,7 +76,7 @@ public class GameController {
                         incrementSeconds();
                         updateFormattedTime();
                         view.setTimeOnPanel(formattedTime);
-                        generatePoint();
+                        //generatePoint();
                         updateView();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -80,6 +84,7 @@ public class GameController {
                 }
             }
             public void stopCounting() { running = false; }
+            /*
             private void generatePoint() {
                 if (seconds == 0) { return; }
                 if (seconds % 5 == 0) {
@@ -100,6 +105,7 @@ public class GameController {
                     }
                 }
             }
+            */
             private void incrementSeconds() {
                 seconds++;
                 if (seconds >= 60) { seconds = 0; minutes++; }
@@ -139,17 +145,8 @@ public class GameController {
                         direction = "Down";
                     }
                 }
-                int newXPos = (pacman.getXPos() + dx + table.getColumnCount()) % table.getColumnCount();
-                int newYPos = (pacman.getYPos() + dy + table.getRowCount()) % table.getRowCount();
-                if (!isWithinMazeBounds(newXPos, newYPos)) {
-                    return;
-                }
                 pacman.move(dx, dy, direction);
                 updateView();
-            }
-            private boolean isWithinMazeBounds(int x, int y) {
-                Object mazeObject = table.getValueAt(y, x);
-                return !(mazeObject instanceof Maze);
             }
         });
     }
