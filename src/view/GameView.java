@@ -138,4 +138,7 @@ public class GameView {
     public void setScoreOnPanel(int score) {
         this.scoreL.setText(String.valueOf(score));
     }
+    public void repaintCell(int x, int y) {
+        table.repaint(table.getCellRect(y, x, false));
+    }
 }
