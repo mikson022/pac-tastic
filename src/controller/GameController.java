@@ -49,13 +49,13 @@ public class GameController {
             MazeGenerator mazeGenerator = new MazeGenerator(rows, columns);
             boolean[][] mazeLayout = mazeGenerator.generateMaze();
 
+            Maze maze = new Maze(table);
             int counter = 0;
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
                     counter += 1;
                     if (mazeLayout[i][j]) {
                         if (counter % 3 != 0){
-                            Maze maze = new Maze(table);
                             cells[i][j].addObject(maze);
                         }
                     }
@@ -76,8 +76,8 @@ public class GameController {
                         incrementSeconds();
                         updateFormattedTime();
                         view.setTimeOnPanel(formattedTime);
+                        view.setScoreOnPanel(score);
                         //generatePoint();
-                        updateView();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -145,15 +145,18 @@ public class GameController {
                         direction = "Down";
                     }
                 }
+                int currentX = pacman.getXPos();
+                int currentY = pacman.getYPos();
+
                 pacman.move(dx, dy, direction);
-                updateView();
+
+                int nextX = pacman.getXPos();
+                int nextY = pacman.getYPos();
+
+                view.repaintCell(currentX, currentY);
+                view.repaintCell(nextX, nextY);
             }
         });
     }
     public static void addPoint() { score += 10; }
-    private void updateView() {
-        view.setScoreOnPanel(score);
-        table.repaint();
-        frame.repaint();
-    }
 }
