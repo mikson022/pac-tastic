@@ -32,6 +32,11 @@ public class Pacman extends JLabel implements Collisional {
             mazeSound.playSound();
             return;
         }
+        if (content instanceof Point) {
+            pointSound.playSound();
+            addScore();
+            destinationCell.removeObject(content);
+        }
         moveSound.playSound();
         this.icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/Pacman" + direction + ".png")));
         this.xPos = x;

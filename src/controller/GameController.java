@@ -7,6 +7,7 @@ import model.Cell;
 import object.Collisional;
 import object.Maze;
 import object.Pacman;
+import object.Point;
 import view.GameView;
 
 import javax.swing.*;
@@ -64,6 +65,7 @@ public class GameController {
             //MazeGeneration
         }
         ThreadModel timeCounter = new ThreadModel() {
+            private Point point = new Point(table);
             private volatile boolean running = true;
             private int minutes;
             private int seconds;
@@ -77,35 +79,30 @@ public class GameController {
                         updateFormattedTime();
                         view.setTimeOnPanel(formattedTime);
                         view.setScoreOnPanel(score);
-                        //generatePoint();
+                        generatePoint();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
             public void stopCounting() { running = false; }
-            /*
             private void generatePoint() {
                 if (seconds == 0) { return; }
                 if (seconds % 5 == 0) {
-                    int x = model.getRandomIntWithinColumns();
-                    int y = model.getRandomIntWithinRows();
-                    boolean collides = false;
-
-                    for (Collision collision : collisions) {
-                        if (collision.collidesWith(x, y)) {
-                            collides = true;
-                            break;
-                        }
-                    }
-                    if (!collides) {
-                        Point newPoint = new Point(table, x, y);
-                        points.add(newPoint);
-                        collisions.add(newPoint);
-                    }
+                    createPoint();
                 }
             }
-            */
+            private void createPoint() {
+                int x = model.getRandomIntWithinColumns();
+                int y = model.getRandomIntWithinRows();
+                Collisional content = cells[y][x].getContent();
+                if (content instanceof Maze) { createPoint(); }
+                if (content instanceof Point) { createPoint(); }
+                else {
+                    cells[y][x].addObject(point);
+                    view.repaintCell(x, y);
+                }
+            }
             private void incrementSeconds() {
                 seconds++;
                 if (seconds >= 60) { seconds = 0; minutes++; }
@@ -158,5 +155,5 @@ public class GameController {
             }
         });
     }
-    public static void addPoint() { score += 10; }
+    public static void addScore() { score += 10; }
 }
