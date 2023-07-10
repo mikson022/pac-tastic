@@ -1,7 +1,7 @@
 package controller;
 
 import model.GameModel;
-import model.MazeGenerator;
+import model.PathGenerator;
 import model.ThreadModel;
 import model.Cell;
 import object.Collisional;
@@ -46,23 +46,23 @@ public class GameController {
         collisions = new CopyOnWriteArrayList<>();
         score = 0;
         {
-            //MazeGeneration
-            MazeGenerator mazeGenerator = new MazeGenerator(rows, columns);
-            boolean[][] mazeLayout = mazeGenerator.generateMaze();
-
+            //PathGeneration
+            PathGenerator mazeGenerator = new PathGenerator(rows, columns);
+            boolean[][] mazeLayout = mazeGenerator.generatePath();
             Maze maze = new Maze(table);
             int counter = 0;
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
                     counter += 1;
                     if (mazeLayout[i][j]) {
-                        if (counter % 3 != 0){
+                        if (counter % 3 != 0) {
                             cells[i][j].addObject(maze);
+                            view.repaintCell(j, i);
                         }
                     }
                 }
             }
-            //MazeGeneration
+            //PathGeneration
         }
         ThreadModel timeCounter = new ThreadModel() {
             private Point point = new Point(table);
@@ -147,11 +147,8 @@ public class GameController {
 
                 pacman.move(dx, dy, direction);
 
-                int nextX = pacman.getXPos();
-                int nextY = pacman.getYPos();
-
                 view.repaintCell(currentX, currentY);
-                view.repaintCell(nextX, nextY);
+                view.repaintCell(currentX + dx, currentY + dy);
             }
         });
     }
