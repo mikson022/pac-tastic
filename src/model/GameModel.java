@@ -13,11 +13,11 @@ public class GameModel {
     }
     public int getRandomIntWithinRows() {
         Random random = new Random();
-        return random.nextInt(table.getRowCount());
+        return random.nextInt(table.getRowCount() - 1);
     }
     public int getRandomIntWithinColumns() {
         Random random = new Random();
-        return random.nextInt(table.getColumnCount());
+        return random.nextInt(table.getColumnCount() - 1);
     }
 }
 
