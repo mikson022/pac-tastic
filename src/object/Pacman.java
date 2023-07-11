@@ -10,9 +10,9 @@ import java.util.Objects;
 import static controller.GameController.*;
 
 public class Pacman extends JLabel implements Collisional {
-    private final SoundModel mazeSound = new SoundModel("maze.wav");
-    private final SoundModel pointSound = new SoundModel("point.wav");
-    private final SoundModel moveSound = new SoundModel("movement.wav");
+    private final SoundModel move = new SoundModel("movement.wav");
+    private final SoundModel maze = new SoundModel("maze.wav");
+    private final SoundModel point = new SoundModel("point.wav");
     private int xPos;
     private int yPos;
     private ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/PacmanRight.png")));
@@ -29,15 +29,22 @@ public class Pacman extends JLabel implements Collisional {
         Cell destinationCell = cells[y][x];
         Collisional content = destinationCell.getContent();
         if (content instanceof Maze) {
-            mazeSound.playSound();
+            maze.playSound();
+            return;
+        }
+        if (content instanceof Ghost) {
+            this.xPos = 0;
+            this.yPos = 0;
+            subtractLife();
+            table.repaint();
             return;
         }
         if (content instanceof Point) {
-            pointSound.playSound();
-            addScore();
             destinationCell.removeObject(content);
+            point.playSound();
+            addScore();
         }
-        moveSound.playSound();
+        move.playSound();
         this.icon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/Pacman" + direction + ".png")));
         this.xPos = x;
         this.yPos = y;
