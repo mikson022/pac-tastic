@@ -4,10 +4,7 @@ import model.GameModel;
 import model.PathGenerator;
 import model.ThreadModel;
 import model.Cell;
-import object.Collisional;
-import object.Maze;
-import object.Pacman;
-import object.Point;
+import object.*;
 import view.GameView;
 
 import javax.swing.*;
@@ -15,15 +12,17 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+
 public class GameController {
     private final GameModel model;
     private final GameView view;
     private final Pacman pacman;
     private final JTable table;
     private final JFrame frame;
-    public static CopyOnWriteArrayList<Collisional> collisions;
+    public static CopyOnWriteArrayList<Ghost> ghosts;
     public static Cell[][] cells;
     private static int score;
+    private static int lives;
     public GameController(int rows, int columns) {
         this.frame = new JFrame();
         table = new JTable(rows, columns) {
@@ -43,8 +42,9 @@ public class GameController {
         model = new GameModel(pacman, table);
         view = new GameView(frame, pacman, table);
 
-        collisions = new CopyOnWriteArrayList<>();
+        ghosts = new CopyOnWriteArrayList<>();
         score = 0;
+        lives = 3;
         {
             //PathGeneration
             PathGenerator mazeGenerator = new PathGenerator(rows, columns);
@@ -64,6 +64,15 @@ public class GameController {
             }
             //PathGeneration
         }
+
+
+
+        createGhost();
+        createGhost();
+        createGhost();
+
+
+
         ThreadModel timeCounter = new ThreadModel() {
             private Point point = new Point(table);
             private volatile boolean running = true;
@@ -77,6 +86,8 @@ public class GameController {
                         Thread.sleep(1000);
                         incrementSeconds();
                         updateFormattedTime();
+                        moveAllGhosts();
+                        view.setLivesOnPanel(lives);
                         view.setTimeOnPanel(formattedTime);
                         view.setScoreOnPanel(score);
                         generatePoint();
@@ -87,7 +98,6 @@ public class GameController {
             }
             public void stopCounting() { running = false; }
             private void generatePoint() {
-                if (seconds == 0) { return; }
                 if (seconds % 5 == 0) {
                     createPoint();
                 }
@@ -97,10 +107,26 @@ public class GameController {
                 int y = model.getRandomIntWithinRows();
                 Collisional content = cells[y][x].getContent();
                 if (content instanceof Maze) { createPoint(); }
+                if (content instanceof Ghost) { createPoint(); }
                 if (content instanceof Point) { createPoint(); }
                 else {
                     cells[y][x].addObject(point);
                     view.repaintCell(x, y);
+                }
+            }
+            private void moveAllGhosts() {
+                for (Ghost ghost : ghosts) {
+                    int currentX = ghost.getXPos();
+                    int currentY = ghost.getYPos();
+                    ghost.move();
+                    int newX = ghost.getXPos();
+                    int newY = ghost.getYPos();
+
+                    cells[currentY][currentX].removeObject(ghost);
+                    cells[newY][newX].addObject(ghost);
+
+                    view.repaintCell(currentX, currentY);
+                    view.repaintCell(newX, newY);
                 }
             }
             private void incrementSeconds() {
@@ -152,5 +178,18 @@ public class GameController {
             }
         });
     }
+    private void createGhost() {
+        int x = model.getRandomIntWithinColumns();
+        int y = model.getRandomIntWithinRows();
+        Collisional content;
+        content = cells[y][x].getContent();
+        if (!(content instanceof Maze)) {
+            Ghost ghost = new Ghost(x, y, table, view);
+            cells[y][x].addObject(ghost);
+            view.repaintCell(x, y);
+            ghosts.add(ghost);
+        }
+    }
+    public static void subtractLife() { lives -= 1; }
     public static void addScore() { score += 10; }
 }
