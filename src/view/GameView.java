@@ -1,8 +1,6 @@
 package view;
 
-import object.Collisional;
-import object.Maze;
-import object.Pacman;
+import object.*;
 import model.Cell;
 import object.Point;
 
@@ -22,7 +20,8 @@ public class GameView {
     private final Pacman pacman;
     private final JFrame frame;
     private final JLabel timeL = new JLabel();
-    private final JLabel scoreL = new JLabel("0");
+    private final JLabel scoreL = new JLabel();
+    private final JLabel livesL = new JLabel();
     public GameView(JFrame frame, Pacman pacman, JTable table) {
         this.pacman = pacman;
         this.table = table;
@@ -52,6 +51,9 @@ public class GameView {
                 if (content != null) {
                     if (content instanceof Maze) {
                         return (Maze) content;
+                    }
+                    if (content instanceof Ghost) {
+                        return (Ghost) content;
                     }
                     if (content instanceof Point) {
                         return (Point) content;
@@ -101,8 +103,6 @@ public class GameView {
         timeL.setForeground(labelForeground);
         panelSouth.add(timeL);
 
-        // below, to be updated
-        JLabel livesL = new JLabel("3");
         livesL.setFont(labelFont);
         livesL.setForeground(labelForeground);
         panelSouth.add(livesL);
@@ -111,6 +111,7 @@ public class GameView {
         scoreL.setForeground(labelForeground);
         panelSouth.add(scoreL);
 
+        // below, to be updated
         JLabel levL = new JLabel("1");
         levL.setFont(labelFont);
         levL.setForeground(labelForeground);
@@ -132,6 +133,7 @@ public class GameView {
         int y = pacman.getYPos() * cellSize;
         pacman.setBounds(x, y, cellSize, cellSize);
     }
+    public void setLivesOnPanel(int lives) { this.livesL.setText(String.valueOf(lives));}
     public void setTimeOnPanel(String time) {
         this.timeL.setText(time);
     }
