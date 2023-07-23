@@ -34,7 +34,7 @@ This project is licensed under the MIT License.
 
 ## Known Issues
 
-- Accessing/modifying the same 2D array of cells by different threads leads to rendering bugs. 
+- Rendering bugs cause some cells to 'blink'.
 
 ## Donations
 Monero - untraceable, private and decentralized.

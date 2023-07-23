@@ -91,6 +91,7 @@ public class GameController {
                         view.setTimeOnPanel(formattedTime);
                         view.setScoreOnPanel(score);
                         generatePoint();
+                        table.repaint();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
