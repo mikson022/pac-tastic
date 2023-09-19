@@ -14,6 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class GameController {
+    private final HighScoreController highScoreController;
     private final GameModel model;
     private final GameView view;
     private final Pacman pacman;
@@ -23,8 +24,10 @@ public class GameController {
     public static Cell[][] cells;
     private static int score;
     private static int lives;
-    public GameController(int rows, int columns) {
+    private static String playersName;
+    public GameController(int rows, int columns, HighScoreController highScoreController) {
         this.frame = new JFrame();
+        this.highScoreController = highScoreController;
         table = new JTable(rows, columns) {
             @Override
             public void changeSelection(int row, int column, boolean toggle, boolean extend) {
@@ -45,6 +48,8 @@ public class GameController {
         ghosts = new CopyOnWriteArrayList<>();
         score = 0;
         lives = 3;
+        playersName = " ";
+
         {
             //PathGeneration
             PathGenerator mazeGenerator = new PathGenerator(rows, columns);
@@ -84,6 +89,7 @@ public class GameController {
                 while (running) {
                     try {
                         Thread.sleep(1000);
+                        if (lives == 0) { stopCounting(); gameOver(); }
                         incrementSeconds();
                         updateFormattedTime();
                         moveAllGhosts();
@@ -190,6 +196,11 @@ public class GameController {
             view.repaintCell(x, y);
             ghosts.add(ghost);
         }
+    }
+    public void gameOver() {
+        frame.dispose();
+        playersName = "playersName";
+        highScoreController.addHSEntry(playersName, score);
     }
     public static void subtractLife() { lives -= 1; }
     public static void addScore() { score += 10; }

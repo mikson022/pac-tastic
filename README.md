@@ -17,6 +17,7 @@ It challenges players to navigate through a maze, eat pellets, avoid enemies, an
 - Main menu with options for starting a new game, viewing high scores, and exiting
 - Real-time graphical interface with time, life, score and level counter
 - Randomly generated maze with customizable size (10 to 100 rows/columns)
+- High scores persistence using the Serializable interface
 
 ## Usage
 
