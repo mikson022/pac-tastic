@@ -5,11 +5,14 @@ import model.PathGenerator;
 import model.ThreadModel;
 import model.Cell;
 import object.*;
+import object.Point;
 import view.GameView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -48,7 +51,6 @@ public class GameController {
         ghosts = new CopyOnWriteArrayList<>();
         score = 0;
         lives = 3;
-        playersName = " ";
 
         {
             //PathGeneration
@@ -199,9 +201,41 @@ public class GameController {
     }
     public void gameOver() {
         frame.dispose();
-        playersName = "playersName";
-        highScoreController.addHSEntry(playersName, score);
+        // Player Name Input
+        {
+            JFrame frame1 = new JFrame("Save your score");
+            frame1.setSize(300, 115);
+            frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame1.setLayout(new BorderLayout());
+
+            ImageIcon pacIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/pics/pacIcon.png")));
+            frame1.setIconImage(pacIcon.getImage());
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new GridLayout(3, 1, 10, 10));
+
+            JLabel label = new JLabel("Player's name: ");
+            JTextField textField = new JTextField(10);
+
+            JButton okButton = new JButton("OK");
+            okButton.setFocusable(false);
+
+            panel.add(label);
+            panel.add(textField);
+            panel.add(okButton);
+
+            okButton.addActionListener(e -> {
+                playersName = textField.getText();
+                frame1.dispose();
+                highScoreController.addHSEntry(playersName, score);
+            });
+
+            frame1.setLocationRelativeTo(null);
+            frame1.add(panel, BorderLayout.CENTER);
+            frame1.setVisible(true);
+        }
     }
+
     public static void subtractLife() { lives -= 1; }
     public static void addScore() { score += 10; }
 }
