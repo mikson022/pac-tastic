@@ -1,9 +1,6 @@
 package controller;
 
-import model.GameModel;
-import model.PathGenerator;
-import model.ThreadModel;
-import model.Cell;
+import model.*;
 import object.*;
 import object.Point;
 import view.GameView;
@@ -200,7 +197,29 @@ public class GameController {
         }
     }
     public void gameOver() {
+        JFrame frame2;
         frame.dispose();
+
+        final SoundModel gameOver = new SoundModel("game-over.wav");
+        gameOver.playSound();
+
+        // Game Over
+        {
+            frame2 = new JFrame("GAME OVER");
+            frame2.setResizable(false);
+
+            ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("pics/gameOver.jpg")));
+
+            JLabel label = new JLabel(imageIcon);
+
+            frame2.getContentPane().add(label);
+
+            frame2.pack();
+            frame2.setLocationRelativeTo(null);
+            frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame2.setVisible(true);
+        }
+
         // Player Name Input
         {
             JFrame frame1 = new JFrame("Save your score");
@@ -227,6 +246,7 @@ public class GameController {
             okButton.addActionListener(e -> {
                 playersName = textField.getText();
                 frame1.dispose();
+                frame2.dispose();
                 highScoreController.addHSEntry(playersName, score);
             });
 
