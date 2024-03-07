@@ -4,7 +4,6 @@ import model.HSEntry;
 import model.HighScoreModel;
 import view.HighScoreView;
 
-import java.io.IOException;
 
 public class HighScoreController {
     private final HighScoreModel model;

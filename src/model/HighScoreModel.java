@@ -53,6 +53,7 @@ public class HighScoreModel implements Serializable {
             if (file.exists()) {
                 FileInputStream fileIn = new FileInputStream(filenameForLogs);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+                @SuppressWarnings("unchecked")
                 List<HSEntry> logs = (List<HSEntry>) objectIn.readObject();
                 objectIn.close();
                 fileIn.close();
